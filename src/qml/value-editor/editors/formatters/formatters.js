@@ -68,6 +68,43 @@ var hexTable = {
 /**
   JSON formatter
 **/
+var jsonWebMap = {
+    title: "JSONWEBMAP",
+    readOnly: false,
+    binary: false,
+    htmlOutput: false,
+
+    getFormatted: function (raw) {
+        try {
+            return JSONFormatter.prettyPrint(raw)
+
+        } catch (e) {
+            return "Error: Invalid JSON"
+        }
+    },
+
+    isValid: function (raw) {
+        try {
+            JSON.parse(raw)
+            return true
+        } catch (e) {
+            return false
+        }
+    },
+
+    getRaw: function (formatted) {        
+        try {
+            return JSONFormatter.minify(formatted)
+        } catch (e) {
+            return formatted
+        }
+    }
+}
+
+
+/**
+  JSON formatter
+**/
 var json = {
     title: "JSON",
     readOnly: false,
@@ -173,7 +210,7 @@ var phpserialized = {
 }
 
 var defaultFormatterIndex = 0;                        
-var enabledFormatters = [plain, json, msgpack, hex, hexTable, phpserialized]
+var enabledFormatters = [plain, json, msgpack, hex, hexTable, phpserialized,jsonWebMap]
 
 function guessFormatter(isBinary, value)
 {
