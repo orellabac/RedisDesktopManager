@@ -84,26 +84,37 @@ function fixWebMapJSON(value) {
   return value;
 }
 
+function fixWebMapJSON2(value) {
+  try {
+	var indexStartJSON = value.indexOf("{");
+	if (indexStartJSON > -1)
+    {
+		return value.substring(indexStartJSON,value.length-1);
+	}
+  }
+  catch (Exception) {
+     
+  }
+  return value;
+}
+
 /**
   JSON formatter
 **/
 var jsonWebMap = {
     title: "JSONWEBMAP",
-    readOnly: false,
+    readOnly: true,
     binary: false,
     htmlOutput: false,
 
     getFormatted: function (raw) {
         try {
-			var raw = binaryUtils.printable(binaryUtils.binaryListToValue(raw));
-			raw = fixWebMapJSON(raw);
+			raw = fixWebMapJSON2(raw);
             return JSONFormatter.prettyPrint(raw)
-
         } catch (e) {
             return "Error: Invalid JSON"
         }
     },
-
     isValid: function (raw) {
         try {
             JSON.parse(raw)
@@ -114,11 +125,7 @@ var jsonWebMap = {
     },
 
     getRaw: function (formatted) {        
-        try {
-            return JSONFormatter.minify(formatted)
-        } catch (e) {
-            return formatted
-        }
+        return formatted
     }
 }
 
