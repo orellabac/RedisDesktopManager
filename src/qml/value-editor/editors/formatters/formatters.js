@@ -65,6 +65,25 @@ var hexTable = {
     }
 }
 
+
+function fixWebMapJSON(value) {
+  try {
+	var indexStartJSON = value.indexOf("{");
+	if (indexStartJSON > -1)
+    {
+		var indexStopJSON = value.indexOf("\\x0B",indexStartJSON);
+		if (indexStopJSON > -1)
+		{
+			var onlyJSON = value.substring(indexStartJSON,indexStopJSON);
+		}
+	}
+  }
+  catch (Exception) {
+     
+  }
+  return value;
+}
+
 /**
   JSON formatter
 **/
@@ -76,6 +95,8 @@ var jsonWebMap = {
 
     getFormatted: function (raw) {
         try {
+			var raw = binaryUtils.printable(binaryUtils.binaryListToValue(raw));
+			raw = fixWebMapJSON(raw);
             return JSONFormatter.prettyPrint(raw)
 
         } catch (e) {
